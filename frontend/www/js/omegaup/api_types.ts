@@ -439,6 +439,33 @@ export namespace types {
       );
     }
 
+    export function CarouselManagementPayload(
+      elementId: string = 'payload',
+    ): types.CarouselManagementPayload {
+      return ((x) => {
+        x.carouselItems = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            if (
+              typeof x.expiration_date !== 'undefined' &&
+              x.expiration_date !== null
+            )
+              x.expiration_date = ((x: number) => new Date(x * 1000))(
+                x.expiration_date,
+              );
+            return x;
+          });
+        })(x.carouselItems);
+        return x;
+      })(
+        JSON.parse(
+          (document.getElementById(elementId) as HTMLElement).innerText,
+        ),
+      );
+    }
+
     export function CertificateDetailsPayload(
       elementId: string = 'payload',
     ): types.CertificateDetailsPayload {
@@ -786,6 +813,34 @@ export namespace types {
             return x;
           });
         })(x.contests);
+        return x;
+      })(
+        JSON.parse(
+          (document.getElementById(elementId) as HTMLElement).innerText,
+        ),
+      );
+    }
+
+    export function ContestListTabPayload(
+      elementId: string = 'payload',
+    ): types.ContestListTabPayload {
+      return ((x) => {
+        x.results = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            x.finish_time = ((x: number) => new Date(x * 1000))(x.finish_time);
+            x.last_updated = ((x: number) => new Date(x * 1000))(
+              x.last_updated,
+            );
+            x.original_finish_time = ((x: number) => new Date(x * 1000))(
+              x.original_finish_time,
+            );
+            x.start_time = ((x: number) => new Date(x * 1000))(x.start_time);
+            return x;
+          });
+        })(x.results);
         return x;
       })(
         JSON.parse(
@@ -1574,6 +1629,52 @@ export namespace types {
       );
     }
 
+    export function CronsDetailsPayload(
+      elementId: string = 'payload',
+    ): types.CronsDetailsPayload {
+      return ((x) => {
+        x.problemHealthFindings = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            x.first_detected_at = ((x: number) => new Date(x * 1000))(
+              x.first_detected_at,
+            );
+            return x;
+          });
+        })(x.problemHealthFindings);
+        x.recommendationModelRuns = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            x.created_at = ((x: number) => new Date(x * 1000))(x.created_at);
+            return x;
+          });
+        })(x.recommendationModelRuns);
+        x.runs = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            if (typeof x.finished_at !== 'undefined' && x.finished_at !== null)
+              x.finished_at = ((x: number) => new Date(x * 1000))(
+                x.finished_at,
+              );
+            if (typeof x.started_at !== 'undefined' && x.started_at !== null)
+              x.started_at = ((x: number) => new Date(x * 1000))(x.started_at);
+            return x;
+          });
+        })(x.runs);
+        return x;
+      })(
+        JSON.parse(
+          (document.getElementById(elementId) as HTMLElement).innerText,
+        ),
+      );
+    }
+
     export function EmailEditDetailsPayload(
       elementId: string = 'payload',
     ): types.EmailEditDetailsPayload {
@@ -1705,6 +1806,21 @@ export namespace types {
       elementId: string = 'payload',
     ): types.IndexPayload {
       return ((x) => {
+        x.carouselItems = ((x) => {
+          if (!Array.isArray(x)) {
+            return x;
+          }
+          return x.map((x) => {
+            if (
+              typeof x.expiration_date !== 'undefined' &&
+              x.expiration_date !== null
+            )
+              x.expiration_date = ((x: number) => new Date(x * 1000))(
+                x.expiration_date,
+              );
+            return x;
+          });
+        })(x.carouselItems);
         x.coderOfTheMonthData = ((x) => {
           if (typeof x.all !== 'undefined' && x.all !== null)
             x.all = ((x) => {
@@ -1800,6 +1916,14 @@ export namespace types {
     export function LoginDetailsPayload(
       elementId: string = 'payload',
     ): types.LoginDetailsPayload {
+      return JSON.parse(
+        (document.getElementById(elementId) as HTMLElement).innerText,
+      );
+    }
+
+    export function OperationsDashboardPayload(
+      elementId: string = 'payload',
+    ): types.OperationsDashboardPayload {
       return JSON.parse(
         (document.getElementById(elementId) as HTMLElement).innerText,
       );
@@ -2647,6 +2771,14 @@ export namespace types {
         (document.getElementById(elementId) as HTMLElement).innerText,
       );
     }
+
+    export function ViewUnavailablePayload(
+      elementId: string = 'payload',
+    ): types.ViewUnavailablePayload {
+      return JSON.parse(
+        (document.getElementById(elementId) as HTMLElement).innerText,
+      );
+    }
   }
 
   export interface ActivityEvent {
@@ -2901,6 +3033,8 @@ export namespace types {
 
   export interface BookmarkProblem {
     alias: string;
+    attempted: boolean;
+    solved: boolean;
     title: string;
   }
 
@@ -2964,12 +3098,16 @@ export namespace types {
     excerpt: string;
     expiration_date?: Date;
     image_url: string;
+    is_active: boolean;
     link: string;
-    status: boolean;
     title: string;
   }
 
   export interface CarouselItemListPayload {
+    carouselItems: types.CarouselItem[];
+  }
+
+  export interface CarouselManagementPayload {
     carouselItems: types.CarouselItem[];
   }
 
@@ -3102,6 +3240,7 @@ export namespace types {
     currentEmail: string;
     currentName?: string;
     currentUsername: string;
+    ephemeralGraderEnabled: boolean;
     gravatarURL128: string;
     gravatarURL51: string;
     inContest: boolean;
@@ -3109,6 +3248,7 @@ export namespace types {
     isLoggedIn: boolean;
     isMainUserIdentity: boolean;
     isReviewer: boolean;
+    isSupportTeamMember: boolean;
     isUnder13User: boolean;
     lockDownImage: string;
     maintenanceMessage?: types.MaintenanceMessage;
@@ -3345,6 +3485,11 @@ export namespace types {
     query?: string;
   }
 
+  export interface ContestListTabPayload {
+    number_of_results: number;
+    results: types.ContestListItem[];
+  }
+
   export interface ContestListv2Payload {
     contests: types.ContestList;
     countContests: { current: number; future: number; past: number };
@@ -3384,6 +3529,13 @@ export namespace types {
   export interface ContestPrintDetailsPayload {
     contestTitle: string;
     problems: { [key: number]: null | types.ProblemDetails };
+  }
+
+  export interface ContestProblemChangeLog {
+    change_type: string;
+    changedBy: string;
+    problemAlias: string;
+    timestamp: Date;
   }
 
   export interface ContestPublicDetails {
@@ -3739,6 +3891,40 @@ export namespace types {
     teachingAssistant: types.FilteredCourse[];
   }
 
+  export interface CronJob {
+    description?: string;
+    enabled: boolean;
+    name: string;
+    schedule?: string;
+  }
+
+  export interface CronRun {
+    duration_seconds?: number;
+    error_text?: string;
+    finished_at?: Date;
+    hostname?: string;
+    name: string;
+    phases: types.CronRunPhase[];
+    rows_affected?: number;
+    run_id: number;
+    started_at?: Date;
+    status: string;
+  }
+
+  export interface CronRunPhase {
+    duration: number;
+    error_class?: string;
+    phase: string;
+    status: string;
+  }
+
+  export interface CronsDetailsPayload {
+    jobs: types.CronJob[];
+    problemHealthFindings: types.ProblemHealthFinding[];
+    recommendationModelRuns: types.RecommendationModelRun[];
+    runs: types.CronRun[];
+  }
+
   export interface CurrentSession {
     apiTokenId?: number;
     api_tokens: types.ApiToken[];
@@ -3923,6 +4109,7 @@ export namespace types {
   }
 
   export interface IndexPayload {
+    carouselItems: types.CarouselItem[];
     coderOfTheMonthData: {
       all?: types.UserProfile;
       female?: types.UserProfile;
@@ -4060,6 +4247,21 @@ export namespace types {
     text: string;
   }
 
+  export interface NominationContents {
+    before_ac?: boolean;
+    difficulty?: number;
+    level?: string;
+    original?: string;
+    quality?: number;
+    quality_seal?: boolean;
+    rationale?: string;
+    reason?: string;
+    source?: string;
+    statements?: { [key: string]: { markdown: string } };
+    tag?: string[];
+    tags?: { [key: string]: string };
+  }
+
   export interface NominationListItem {
     author: { name?: string; username: string };
     contents?: {
@@ -4114,6 +4316,12 @@ export namespace types {
     status?: string;
     type: string;
     url?: string;
+  }
+
+  export interface OperationsDashboardPayload {
+    accessLevel: string;
+    maintenanceMode: types.MaintenanceModeStatus;
+    maintenancePredefinedTemplates: types.PredefinedTemplate[];
   }
 
   export interface PageItem {
@@ -4310,6 +4518,16 @@ export namespace types {
     alias: string;
     name: string;
     role: string;
+  }
+
+  export interface ProblemHealthFinding {
+    alias: string;
+    check_type: string;
+    detail?: string;
+    first_detected_at: Date;
+    problem_id: number;
+    severity: string;
+    title: string;
   }
 
   export interface ProblemInfo {
@@ -4569,6 +4787,17 @@ export namespace types {
   export interface Progress {
     max_score: number;
     score: number;
+  }
+
+  export interface RecommendationModelRun {
+    created_at: Date;
+    dataset_size: number;
+    map_score: number;
+    model_run_id: number;
+    output_path?: string;
+    published: boolean;
+    rng_seed?: number;
+    skip_reason?: string;
   }
 
   export interface Run {
@@ -4865,6 +5094,7 @@ export namespace types {
 
   export interface ScoreboardRankingProblem {
     alias: string;
+    first_solved?: number;
     penalty: number;
     pending?: number;
     percent: number;
@@ -5029,6 +5259,11 @@ export namespace types {
     name: string;
   }
 
+  export interface TagDistribution {
+    count: number;
+    name: string;
+  }
+
   export interface TagWithProblemCount {
     name: string;
     problemCount: number;
@@ -5041,8 +5276,9 @@ export namespace types {
     maxNumberOfContestants: number;
     teamGroup: {
       alias: string;
+      archived: boolean;
       description?: string;
-      name?: string;
+      name: string;
       numberOfContestants: number;
     };
     teamsMembers: types.TeamMember[];
@@ -5064,6 +5300,7 @@ export namespace types {
 
   export interface TeamsGroup {
     alias: string;
+    archived: boolean;
     create_time: Date;
     description?: string;
     name: string;
@@ -5273,6 +5510,10 @@ export namespace types {
     hasParentalVerificationToken: boolean;
     message: string;
   }
+
+  export interface ViewUnavailablePayload {
+    description: string;
+  }
 }
 
 // API messages
@@ -5295,8 +5536,23 @@ export namespace messages {
   };
 
   // Admin
+  export type AdminGetCronRunRequest = { [key: string]: any };
+  export type _AdminGetCronRunServerResponse = any;
+  export type AdminGetCronRunResponse = { run?: types.CronRun };
+  export type AdminGetCronsRequest = { [key: string]: any };
+  export type _AdminGetCronsServerResponse = any;
+  export type AdminGetCronsResponse = {
+    jobs: types.CronJob[];
+    problemHealthFindings: types.ProblemHealthFinding[];
+    recommendationModelRuns: types.RecommendationModelRun[];
+    runs: types.CronRun[];
+  };
   export type AdminGetMaintenanceModeRequest = { [key: string]: any };
   export type AdminGetMaintenanceModeResponse = types.MaintenanceModeStatus;
+  export type AdminGetSystemSettingsRequest = { [key: string]: any };
+  export type AdminGetSystemSettingsResponse = {
+    settings: { ephemeralGraderEnabled: boolean };
+  };
   export type AdminPlatformReportStatsRequest = { [key: string]: any };
   export type AdminPlatformReportStatsResponse = {
     report: {
@@ -5311,8 +5567,12 @@ export namespace messages {
       };
     };
   };
+  export type AdminRerunCronRequest = { [key: string]: any };
+  export type AdminRerunCronResponse = { queued: boolean };
   export type AdminSetMaintenanceModeRequest = { [key: string]: any };
   export type AdminSetMaintenanceModeResponse = {};
+  export type AdminUpdateSystemSettingsRequest = { [key: string]: any };
+  export type AdminUpdateSystemSettingsResponse = {};
 
   // AiEditorial
   export type AiEditorialGenerateRequest = { [key: string]: any };
@@ -5358,9 +5618,6 @@ export namespace messages {
   export type CarouselItemsListRequest = { [key: string]: any };
   export type _CarouselItemsListServerResponse = any;
   export type CarouselItemsListResponse = types.CarouselItemListPayload;
-  export type CarouselItemsListActiveRequest = { [key: string]: any };
-  export type _CarouselItemsListActiveServerResponse = any;
-  export type CarouselItemsListActiveResponse = types.CarouselItemListPayload;
   export type CarouselItemsUpdateRequest = { [key: string]: any };
   export type CarouselItemsUpdateResponse = {};
 
@@ -5449,9 +5706,13 @@ export namespace messages {
   };
   export type ContestListRequest = { [key: string]: any };
   export type _ContestListServerResponse = any;
-  export type ContestListResponse = {
-    number_of_results: number;
-    results: types.ContestListItem[];
+  export type ContestListResponse = types.ContestListTabPayload;
+  export type ContestListAllTabsRequest = { [key: string]: any };
+  export type _ContestListAllTabsServerResponse = any;
+  export type ContestListAllTabsResponse = {
+    current: types.ContestListTabPayload;
+    future: types.ContestListTabPayload;
+    past: types.ContestListTabPayload;
   };
   export type ContestListParticipatingRequest = { [key: string]: any };
   export type _ContestListParticipatingServerResponse = any;
@@ -5467,6 +5728,11 @@ export namespace messages {
   };
   export type ContestOpenRequest = { [key: string]: any };
   export type ContestOpenResponse = {};
+  export type ContestProblemChangeLogsRequest = { [key: string]: any };
+  export type _ContestProblemChangeLogsServerResponse = any;
+  export type ContestProblemChangeLogsResponse = {
+    logs: types.ContestProblemChangeLog[];
+  };
   export type ContestProblemClarificationsRequest = { [key: string]: any };
   export type _ContestProblemClarificationsServerResponse = any;
   export type ContestProblemClarificationsResponse = {
@@ -6135,14 +6401,8 @@ export namespace messages {
   export type TeamsGroupCreateRequest = { [key: string]: any };
   export type TeamsGroupCreateResponse = {};
   export type TeamsGroupDetailsRequest = { [key: string]: any };
-  export type TeamsGroupDetailsResponse = {
-    team_group: {
-      alias?: string;
-      create_time: number;
-      description?: string;
-      name?: string;
-    };
-  };
+  export type _TeamsGroupDetailsServerResponse = any;
+  export type TeamsGroupDetailsResponse = { team_group: types.TeamsGroup };
   export type TeamsGroupListRequest = { [key: string]: any };
   export type TeamsGroupListResponse = types.ListItem[];
   export type TeamsGroupRemoveMemberRequest = { [key: string]: any };
@@ -6254,7 +6514,8 @@ export namespace messages {
       unlabelled: number;
     };
     solved: number;
-    tags: { count: number; name: string }[];
+    tags: types.TagDistribution[];
+    tagsFull: types.TagDistribution[];
   };
   export type UserRemoveExperimentRequest = { [key: string]: any };
   export type UserRemoveExperimentResponse = {};
@@ -6307,15 +6568,30 @@ export namespace controllers {
   }
 
   export interface Admin {
+    getCronRun: (
+      params?: messages.AdminGetCronRunRequest,
+    ) => Promise<messages.AdminGetCronRunResponse>;
+    getCrons: (
+      params?: messages.AdminGetCronsRequest,
+    ) => Promise<messages.AdminGetCronsResponse>;
     getMaintenanceMode: (
       params?: messages.AdminGetMaintenanceModeRequest,
     ) => Promise<messages.AdminGetMaintenanceModeResponse>;
+    getSystemSettings: (
+      params?: messages.AdminGetSystemSettingsRequest,
+    ) => Promise<messages.AdminGetSystemSettingsResponse>;
     platformReportStats: (
       params?: messages.AdminPlatformReportStatsRequest,
     ) => Promise<messages.AdminPlatformReportStatsResponse>;
+    rerunCron: (
+      params?: messages.AdminRerunCronRequest,
+    ) => Promise<messages.AdminRerunCronResponse>;
     setMaintenanceMode: (
       params?: messages.AdminSetMaintenanceModeRequest,
     ) => Promise<messages.AdminSetMaintenanceModeResponse>;
+    updateSystemSettings: (
+      params?: messages.AdminUpdateSystemSettingsRequest,
+    ) => Promise<messages.AdminUpdateSystemSettingsResponse>;
   }
 
   export interface AiEditorial {
@@ -6367,9 +6643,6 @@ export namespace controllers {
     list: (
       params?: messages.CarouselItemsListRequest,
     ) => Promise<messages.CarouselItemsListResponse>;
-    listActive: (
-      params?: messages.CarouselItemsListActiveRequest,
-    ) => Promise<messages.CarouselItemsListActiveResponse>;
     update: (
       params?: messages.CarouselItemsUpdateRequest,
     ) => Promise<messages.CarouselItemsUpdateResponse>;
@@ -6460,6 +6733,9 @@ export namespace controllers {
     list: (
       params?: messages.ContestListRequest,
     ) => Promise<messages.ContestListResponse>;
+    listAllTabs: (
+      params?: messages.ContestListAllTabsRequest,
+    ) => Promise<messages.ContestListAllTabsResponse>;
     listParticipating: (
       params?: messages.ContestListParticipatingRequest,
     ) => Promise<messages.ContestListParticipatingResponse>;
@@ -6469,6 +6745,9 @@ export namespace controllers {
     open: (
       params?: messages.ContestOpenRequest,
     ) => Promise<messages.ContestOpenResponse>;
+    problemChangeLogs: (
+      params?: messages.ContestProblemChangeLogsRequest,
+    ) => Promise<messages.ContestProblemChangeLogsResponse>;
     problemClarifications: (
       params?: messages.ContestProblemClarificationsRequest,
     ) => Promise<messages.ContestProblemClarificationsResponse>;
